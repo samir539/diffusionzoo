@@ -55,5 +55,13 @@ class Block(eqx.Module):
         return self._transform(h)
         
         
+class SimpleUnet(eqx.Module):
+    _time_mlp: eqx.nn.Sequential
+    _conv0: eqx.nn.Conv2d
+    _downs: list
+    _ups: list
+    _output: eqx.nn.Conv2d
     
+    def __init__(self,key):
+        pass
     
