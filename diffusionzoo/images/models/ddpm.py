@@ -10,7 +10,7 @@ import math
 
 
 class DDPMForwardProcess():
-    _noising_space: jax.Array
+    
 
     def __init__(self,start,stop,timesteps,):
        self._betas = jnp.linspace(start,stop,timesteps) 
