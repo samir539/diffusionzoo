@@ -63,5 +63,13 @@ class SimpleUnet(eqx.Module):
     _output: eqx.nn.Conv2d
     
     def __init__(self,key):
-        pass
+        image_channels = 3
+        down_channels = (64,128,256,512,1024)
+        up_channels = (1024,512,256,128,64)
+        out_dim = 3
+        time_embed_dim = 32
+        
+        self._time_mlp = eqx.nn.Sequential([sinusoidalPositionEmbeddngs(time_embed_dim),eqx.nn.Linear(time_embed_dim,time_embed_dim,key=key), jax.nn.relu])
+        
+        
     
