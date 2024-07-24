@@ -26,7 +26,6 @@ class sinusoidalPositionEmbeddngs(eqx.Module):
 
 class Block(eqx.Module):
     _transform: eqx.nn.Conv2d
-    _up: bool
     _time_mlp: eqx.nn.Linear
     _conv1: eqx.nn.Conv2d
     _conv2: eqx.nn.Conv2d
@@ -43,8 +42,8 @@ class Block(eqx.Module):
         else:
             self._transform = eqx.nn.Conv2d(out_channels,out_channels,4,2,1,key=key)
         self._conv2 = eqx.nn.Conv2d(out_channels,out_channels,3,padding=1,key=key)
-        self._bnorm1 = eqx.nn.BatchNorm(out_channels)
-        self._bnorm2 = eqx.nn.BatchNorm(out_channels)
+        self._bnorm1 = eqx.nn.BatchNorm(out_channels,axis_name="batch")
+        self._bnorm2 = eqx.nn.BatchNorm(out_channels,axis_name="batch")
         
     def __call__(self,x,t):
         h = self._bnorm1(jax.nn.relu(self._conv1(x)))   #bcwh
@@ -95,7 +94,13 @@ class SimpleUnet(eqx.Module):
         
         
         
-        
+key = jax.random.PRNGKey(0)
+model = SimpleUnet(key)
+
+params = eqx.filter(model, eqx.is_array)
+num_params = sum(x.size for x in jax.tree_util.tree_leaves(params))
+
+print("Num params: ", num_params)
         
         
         
