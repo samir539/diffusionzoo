@@ -46,6 +46,14 @@ class Block(eqx.Module):
         self._bnorm1 = eqx.nn.BatchNorm(out_channels)
         self._bnorm2 = eqx.nn.BatchNorm(out_channels)
         
-
+    def __call__(self,x,t):
+        h = self._bnorm1(jax.nn.relu(self._conv1(x)))   #bcwh
+        time_embedding = jax.nn.relu(self._time_mlp(t)) #dim [batch,outchannels]
+        time_embedding = time_embedding[(...,)+[None,]*2] #prep for broadcasting
+        h = h + time_embedding
+        h = self._bnorm2(jax.nn.relu(self._conv2(h)))
+        return self._transform(h)
+        
+        
     
     
