@@ -36,16 +36,15 @@ class Block(eqx.Module):
     
     def __init__(self, in_channels,out_channels,time_embed_dim,up=False,*,key):
         self._time_mlp = eqx.nn.Linear(time_embed_dim,out_channels,key=key)
+        self._conv1 = eqx.nn.Conv2d(in_channels,out_channels,3,padding=1,key=key)
         if up:
-            self._conv1 = eqx.nn.Conv2d(2*in_channels,out_channels,3,padding=1)
+            # self._conv1 = eqx.nn.Conv2d(2*in_channels,out_channels,3,padding=1,key=key)
             self._transform = eqx.nn.ConvTranspose2d(out_channels, out_channels, 4,2,1,key=key)
         else:
-            self._conv1 = eqx.nn.Conv2d(in_channels,out_channels,3,padding=1)
-            self._transform = eqx.nn.Conv2d(out_channels,out_channels,4,2,1)
-        self._conv2 = eqx.nn.Conv2d(out_channels,out_channels,3,padding=1)
+            self._transform = eqx.nn.Conv2d(out_channels,out_channels,4,2,1,key=key)
+        self._conv2 = eqx.nn.Conv2d(out_channels,out_channels,3,padding=1,key=key)
         self._bnorm1 = eqx.nn.BatchNorm(out_channels)
         self._bnorm2 = eqx.nn.BatchNorm(out_channels)
-        self.
         
 
     
