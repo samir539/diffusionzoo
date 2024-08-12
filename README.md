@@ -1,2 +1,2 @@
-#diffuion_zoo
-test change
+# diffusionzoo
+![a zoo of animals](./repository_resources/banner.jpg)
